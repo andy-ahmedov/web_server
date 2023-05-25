@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"github.com/dev11/pkg/models/mysql"
+	"github.com/andy-ahmedov/web_server/pkg/models/mysql"
 	"log"
 	"net/http"
 	"os"

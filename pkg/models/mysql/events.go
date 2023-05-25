@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"database/sql"
-	"github.com/dev11/pkg/models"
+	"github.com/andy-ahmedov/web_server/pkg/models"
 )
 
 type EventModel struct {
