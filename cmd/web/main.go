@@ -70,7 +70,7 @@ func main() {
 	app := &application{
 		errorLog: errorLog,
 		infoLog:  infoLog,
-		event:    &mysql.EventModel{DB: db},
+		events:   &mysql.EventModel{DB: db},
 	}
 
 	srv := &http.Server{

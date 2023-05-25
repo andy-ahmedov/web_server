@@ -7,7 +7,7 @@ import (
 
 var ErrNoRecord = errors.New("models: подходящей записи не найдено")
 
-type Events struct {
+type Event struct {
 	ID      int
 	Title   string
 	Content string
