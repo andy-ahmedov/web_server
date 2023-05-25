@@ -1,4 +1,4 @@
-module github.com/andy-ahmedov/wildberries_level_2/develop/web_server
+module github.com/andy-ahmedov/web_server
 
 go 1.19
 
