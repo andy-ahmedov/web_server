@@ -3,19 +3,22 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"github.com/andy-ahmedov/web_server/pkg/models/mysql"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 
+	"github.com/andy-ahmedov/web_server/pkg/models/mysql"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type application struct {
-	infoLog  *log.Logger
-	errorLog *log.Logger
-	events   *mysql.EventModel
+	infoLog       *log.Logger
+	errorLog      *log.Logger
+	events        *mysql.EventModel
+	templateCache map[string]*template.Template
 }
 
 type neuteredFileSystem struct {
@@ -67,10 +70,16 @@ func main() {
 	}
 	defer db.Close()
 
+	templateCache, err := newTemplateCache("./ui/html/")
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	app := &application{
-		errorLog: errorLog,
-		infoLog:  infoLog,
-		events:   &mysql.EventModel{DB: db},
+		errorLog:      errorLog,
+		infoLog:       infoLog,
+		events:        &mysql.EventModel{DB: db},
+		templateCache: templateCache,
 	}
 
 	srv := &http.Server{

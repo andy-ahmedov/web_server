@@ -3,11 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/andy-ahmedov/web_server/pkg/models"
 	"log"
 	"net/http"
 	"strconv"
-	"text/template"
+
+	"github.com/andy-ahmedov/web_server/pkg/models"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -16,23 +16,16 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	files := []string{
-		"./ui/html/home.page.html",
-		"./ui/html/base.layout.html",
-		"./ui/html/footer.partial.html",
-	}
-
-	ts, err := template.ParseFiles(files...)
+	e, err := app.events.Latest()
 	if err != nil {
+		fmt.Println("HANDLER ERR")
 		app.serverError(w, err)
 		return
 	}
 
-	err = ts.Execute(w, nil)
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
+	app.render(w, r, "home.page.tmpl", &templateData{
+		Events: e,
+	})
 
 	log.Println("Knock in /")
 }
@@ -53,7 +46,12 @@ func (app *application) showEvent(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	fmt.Fprintf(w, "%v", e)
+
+	app.render(w, r, "show.page.tmpl", &templateData{
+		Event: e,
+	})
+
+	// fmt.Fprintf(w, "%v", e)
 	log.Println("Knock in /event")
 }
 

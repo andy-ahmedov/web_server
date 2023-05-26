@@ -3,6 +3,7 @@ package mysql
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/andy-ahmedov/web_server/pkg/models"
 )
@@ -48,5 +49,32 @@ func (m *EventModel) Get(id int) (*models.Event, error) {
 }
 
 func (m *EventModel) Latest() ([]*models.Event, error) {
-	return nil, nil
+	statement := `SELECT id, title, content, created, expires FROM events
+	WHERE expires > UTC_TIMESTAMP() ORDER BY created DESC LIMIT 10`
+
+	rows, err := m.DB.Query(statement)
+	if err != nil {
+		fmt.Println("CREATE ERR")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var events []*models.Event
+
+	for rows.Next() {
+		ev := &models.Event{}
+		err = rows.Scan(&ev.ID, &ev.Title, &ev.Content, &ev.Created, &ev.Expires)
+		if err != nil {
+			fmt.Println("ROWS SCAN ERR")
+			return nil, err
+		}
+		events = append(events, ev)
+	}
+
+	if err = rows.Err(); err != nil {
+		fmt.Println("CREATE ERR")
+		return nil, err
+	}
+
+	return events, nil
 }

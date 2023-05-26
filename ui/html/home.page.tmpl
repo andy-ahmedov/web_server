@@ -1,0 +1,24 @@
+{{template "base" .}}
+
+{{define "title"}}Домашняя страница{{end}}
+{{define "main"}}
+	<h2>Последние Заметки</h2>
+	{{if .Events}}
+	<table>
+		<tr>
+			<th>Заголовок</th>
+			<th>Создан</th>
+			<th>ID</th>
+		</tr>
+		{{range .Events}}
+		<tr>
+			<td><a href='/event?id={{.ID}}'>{{.Title}}</a></td>
+			<td>{{.Created}}</td>
+			<td>{{.ID}}</td>
+		</tr>
+		{{end}}
+	</table>
+	{{else}}
+	<p>Здесь пока ничего нет...</p>
+	{{end}}
+{{end}}
